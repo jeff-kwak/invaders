@@ -9,7 +9,7 @@ x ART: UFO with animation
 x ART: laser cannon with layers
 x ART: missile and bomb
 x CODE: Enemy setup and locomotion
-* CODE: Player locomotion
+x CODE: Player locomotion
 * CODE: Fire missiles destroy enemies
 * CODE: Drop bombs from enemies
 * CODE: Shields provide cover
@@ -33,5 +33,7 @@ x CODE: Enemy setup and locomotion
 * ART: Particle for shield explosions
 * ART: Particle for player explosion
 * ART: Particle for missed bomb explosion
+* ART: Redesign main menu
+* AST: Playing background
 * INFRA: Build for WebGL and release
 ---

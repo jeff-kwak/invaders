@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a699394a91e18db43bc505f9d9441e8c, type: 3}
   m_Name: GamePlayParams
   m_EditorClassIdentifier: 
-  EnemySpeed: 2
-  EnemyDropDistance: 0.7
+  EnemySpeed: 0.5
+  EnemyDropDistance: 0.2
+  PlayerSpeed: 1
+  PlayerLeftLimit: -5
+  PlayerRightLimit: 5

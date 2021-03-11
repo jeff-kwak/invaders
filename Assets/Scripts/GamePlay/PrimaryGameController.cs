@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class PrimaryGameController : MonoBehaviour
 {
@@ -146,6 +147,24 @@ public class PrimaryGameController : MonoBehaviour
   {
     var pos = EnemyGrid.transform.position + EnemyDirection * GamePlay.EnemySpeed * Time.deltaTime;
     EnemyGrid.transform.SetPositionAndRotation(pos, Quaternion.identity);
+  }
+
+  private void OnMove(InputValue inputValue)
+  {
+    var leftRightInput = inputValue.Get<Vector2>().x;
+    
+    if(leftRightInput < 0)
+    {
+      CommandBus.RequestPlayerMoveLeft();
+    }
+    else if(leftRightInput > 0)
+    {
+      CommandBus.RequestPlayerMoveRight();
+    }
+    else
+    {
+      CommandBus.RequestPlayerStop();
+    }    
   }
 
   private void EventBus_OnSceneTransitionEnterCompleted()
