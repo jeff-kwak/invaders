@@ -8,7 +8,7 @@ x ART: enemy-echo with layers
 x ART: UFO with animation
 x ART: laser cannon with layers
 x ART: missile and bomb
-* CODE: Enemy initial spawn and locomotion
+x CODE: Enemy setup and locomotion
 * CODE: Player locomotion
 * CODE: Fire missiles destroy enemies
 * CODE: Drop bombs from enemies

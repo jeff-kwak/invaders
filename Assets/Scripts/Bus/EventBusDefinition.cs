@@ -9,6 +9,8 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler OnQuitClicked;
   public event EventBusHandler OnSceneTransitionLeaveCompleted;
   public event EventBusHandler OnSceneTransitionEnterCompleted;
+  public event EventBusHandler OnCollisionWithLeftWall;
+  public event EventBusHandler OnCollisionWithRightWall;
 
   public void RaiseOnPlayClicked()
   {
@@ -28,5 +30,15 @@ public class EventBusDefinition : ScriptableObject
   public void RaiseOnSceneTransitionEnterCompleted()
   {
     OnSceneTransitionEnterCompleted?.Invoke();
+  }
+
+  public void RaiseOnCollisionWithLeftWall()
+  {
+    OnCollisionWithLeftWall?.Invoke();
+  }
+
+  public void RaiseOnCollisionWithRightWall()
+  {
+    OnCollisionWithRightWall?.Invoke();
   }
 }

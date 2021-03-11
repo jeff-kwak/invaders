@@ -7,6 +7,7 @@ public class CommandBusDefinition : ScriptableObject
 {
   public event CommandBusHandler OnSceneTransitionLeave;
   public event CommandBusHandler OnSceneTransitionEnter;
+  public event CommandBusHandler OnEnemyReset;
 
   public void RequestSceneTransitionLeave()
   {
@@ -16,5 +17,10 @@ public class CommandBusDefinition : ScriptableObject
   public void RequestSceneTransitionEnter()
   {
     OnSceneTransitionEnter?.Invoke();
+  }
+
+  public void RequestEnemyReset()
+  {
+    OnEnemyReset?.Invoke();
   }
 }
