@@ -50,6 +50,7 @@ public class PlayerController : MonoBehaviour
     Command.OnPlayerMoveLeft += Command_OnPlayerMoveLeft;
     Command.OnPlayerStop += Command_OnPlayerStop;
     Command.OnPlayerFire += Command_OnPlayerFire;
+    Command.OnPlayerReset += Command_OnPlayerReset;
   }
 
   private void OnDestroy()
@@ -58,6 +59,7 @@ public class PlayerController : MonoBehaviour
     Command.OnPlayerMoveLeft -= Command_OnPlayerMoveLeft;
     Command.OnPlayerStop -= Command_OnPlayerStop;
     Command.OnPlayerFire -= Command_OnPlayerFire;
+    Command.OnPlayerReset -= Command_OnPlayerReset;
   }
 
   private void Update()
@@ -108,6 +110,14 @@ public class PlayerController : MonoBehaviour
   private void Command_OnPlayerFire()
   {
     FireStateMachine.Fire(FireTrigger.Fire, SpawnMissle);
+  }
+
+  private void Command_OnPlayerReset()
+  {
+    gameObject.SetActive(true);
+    var pos = new Vector3(0, transform.position.y, 0);
+    transform.SetPositionAndRotation(pos, Quaternion.identity);
+    FireStateMachine.Fire(FireTrigger.CooldownComplete);
   }
 
   private void SpawnMissle()

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 public delegate void CommandBusHandler();
+public delegate void CommandBusHandler<T>(T arg);
 
 [CreateAssetMenu(menuName = "Game/CommandBus")]
 public class CommandBusDefinition : ScriptableObject
@@ -13,6 +14,8 @@ public class CommandBusDefinition : ScriptableObject
   public event CommandBusHandler OnPlayerMoveRight;
   public event CommandBusHandler OnPlayerStop;
   public event CommandBusHandler OnPlayerFire;
+  public event CommandBusHandler<Vector3> OnBombDrop;
+  public event CommandBusHandler OnPlayerReset;
 
   public void RequestSceneTransitionLeave()
   {
@@ -47,5 +50,15 @@ public class CommandBusDefinition : ScriptableObject
   public void RequestPlayerFire()
   {
     OnPlayerFire?.Invoke();
+  }
+
+  public void RequestBombDrop(Vector3 pos)
+  {
+    OnBombDrop?.Invoke(pos);
+  }
+
+  internal void RequestPlayerReset()
+  {
+    OnPlayerReset?.Invoke();
   }
 }

@@ -10,7 +10,6 @@ public class PrimaryGameController : MonoBehaviour
   public EventBusDefinition EventBus;
   public CommandBusDefinition CommandBus;
   public GamePlayDefinition GamePlay;
-
   public GameObject EnemyGrid;
 
   private enum State
@@ -33,12 +32,13 @@ public class PrimaryGameController : MonoBehaviour
     LeftWallCollision,
     RightWallCollision,
     EnemyHasMovedDown,
-    EnemyHasTravelledDropDistance
+    EnemyHasTravelledDropDistance,
   }
 
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float accumulatedMoveDistance = 0f;
+  private State LastMovementState = State.MoveLeft;
 
 
   private void Awake()
@@ -63,14 +63,12 @@ public class PrimaryGameController : MonoBehaviour
 
     Machine.Configure(State.MoveDownOnLeft)
       .OnEnter(ChangeDirectionToDown)
-      .OnExit(() => Debug.Log($"Leaving state {Machine.State}"))
       .Permit(Trigger.MoveEnemy, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveRight);
 
     Machine.Configure(State.MoveRight)
       .OnEnter(ChangeDirectionToRight)
-      .OnExit(() => Debug.Log($"Leaving state {Machine.State}"))
       .Permit(Trigger.MoveEnemy, State.MoveRight)
       .Permit(Trigger.RightWallCollision, State.MoveDownOnRight);
 
@@ -80,16 +78,32 @@ public class PrimaryGameController : MonoBehaviour
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveLeft);
 
+
     EventBus.OnSceneTransitionEnterCompleted += EventBus_OnSceneTransitionEnterCompleted;
     EventBus.OnCollisionWithLeftWall += EventBus_OnCollisionWithLeftWall;
     EventBus.OnCollisionWithRightWall += EventBus_OnCollisionWithRightWall;
     EventBus.OnMissileHitEnemy += EventBus_OnMissileHitEnemy;
+    EventBus.OnBombHitPlayer += EventBus_OnBombHitPlayer;
   }
 
-  private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
+  private void OnDestroy()
   {
-    enemy.SetActive(false);
-    missile.SetActive(false);
+    EventBus.OnSceneTransitionEnterCompleted -= EventBus_OnSceneTransitionEnterCompleted;
+    EventBus.OnCollisionWithLeftWall -= EventBus_OnCollisionWithLeftWall;
+    EventBus.OnCollisionWithRightWall -= EventBus_OnCollisionWithRightWall;
+    EventBus.OnMissileHitEnemy -= EventBus_OnMissileHitEnemy;
+    EventBus.OnBombHitPlayer -= EventBus_OnBombHitPlayer;
+  }
+
+  private void Start()
+  {
+    Machine.Fire(Trigger.Setup);
+  }
+
+  private void Update()
+  {
+    AccumulateMoveDistance();
+    Machine.Fire(Trigger.MoveEnemy, MoveEnemy);
   }
 
   private void ChangeDirectionToRight()
@@ -109,25 +123,6 @@ public class PrimaryGameController : MonoBehaviour
   {
     Debug.Log($"Changing direction to left: {Machine.State}");
     EnemyDirection = Vector3.left;
-  }
-
-  private void OnDestroy()
-  {
-    EventBus.OnSceneTransitionEnterCompleted -= EventBus_OnSceneTransitionEnterCompleted;
-    EventBus.OnCollisionWithLeftWall -= EventBus_OnCollisionWithLeftWall;
-    EventBus.OnCollisionWithRightWall -= EventBus_OnCollisionWithRightWall;
-    EventBus.OnMissileHitEnemy -= EventBus_OnMissileHitEnemy;
-  }
-
-  private void Start()
-  {
-    Machine.Fire(Trigger.Setup);
-  }
-
-  private void Update()
-  {
-    AccumulateMoveDistance();
-    Machine.Fire(Trigger.MoveEnemy, MoveEnemy);
   }
 
   private void SetupGame()
@@ -157,6 +152,12 @@ public class PrimaryGameController : MonoBehaviour
     EnemyGrid.transform.SetPositionAndRotation(pos, Quaternion.identity);
   }
 
+  private void ResumeAfterRespawn()
+  {
+    CommandBus.RequestPlayerReset();
+  }
+
+  // Message from the Input System
   private void OnMove(InputValue inputValue)
   {
     var leftRightInput = inputValue.Get<Vector2>().x;
@@ -175,6 +176,7 @@ public class PrimaryGameController : MonoBehaviour
     }    
   }
 
+  // Message from the Input System
   private void OnFire(InputValue inputValue)
   {
     CommandBus.RequestPlayerFire();
@@ -187,14 +189,25 @@ public class PrimaryGameController : MonoBehaviour
   }
 
   private void EventBus_OnCollisionWithRightWall()
-  {
-    Debug.Log("collision with right wall");
-    Machine.Fire(Trigger.RightWallCollision);
+  {    
+    Machine.Fire(Trigger.RightWallCollision, () => Debug.Log("collision with right wall"));
   }
 
   private void EventBus_OnCollisionWithLeftWall()
   {
-    Debug.Log("collision with left wall");
-    Machine.Fire(Trigger.LeftWallCollision);
+    Machine.Fire(Trigger.LeftWallCollision, () => Debug.Log("collision with left wall"));
+  }
+
+  private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
+  {
+    enemy.SetActive(false);
+    missile.SetActive(false);
+  }
+
+  private void EventBus_OnBombHitPlayer(GameObject bomb, GameObject player)
+  {
+    player.SetActive(false);
+    bomb.SetActive(false);
+    Invoke(nameof(ResumeAfterRespawn), GamePlay.RespawnTime);
   }
 }

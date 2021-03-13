@@ -19,3 +19,6 @@ MonoBehaviour:
   PlayerRightLimit: 5
   PlayerFireLimit: 3
   MissleSpeed: 4
+  BombSpeed: 3
+  MinBombRate: 0.3
+  MaxBombRate: 1

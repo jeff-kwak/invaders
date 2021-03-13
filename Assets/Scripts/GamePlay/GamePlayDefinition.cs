@@ -13,4 +13,8 @@ public class GamePlayDefinition : ScriptableObject
   public float PlayerRightLimit = 5f; // u
   public float PlayerFireLimit = 3f; // shots/s
   public float MissleSpeed = 3f; // u/s
+  public float BombSpeed = 3f; // u/s
+  public float MinTimeBetweenBombs = 2f; // seconds
+  public float MaxTimeBetweenBombs = 10f; // bomb/s
+  public float RespawnTime = 3f; // seconds
 }

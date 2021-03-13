@@ -15,6 +15,7 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler OnCollisionWithLeftWall;
   public event EventBusHandler OnCollisionWithRightWall;
   public event EventBusHandler<GameObject, GameObject> OnMissileHitEnemy;
+  public event EventBusHandler<GameObject, GameObject> OnBombHitPlayer;
 
   public void RaiseOnPlayClicked()
   {
@@ -24,6 +25,11 @@ public class EventBusDefinition : ScriptableObject
   public void RaiseMissileHitEnemy(GameObject missile, GameObject enemy)
   {
     OnMissileHitEnemy?.Invoke(missile, enemy);
+  }
+
+  public void RaiseOnBombHitPlayer(GameObject bomb, GameObject player)
+  {
+    OnBombHitPlayer?.Invoke(bomb, player);
   }
 
   public void RaiseOnQuitClicked()

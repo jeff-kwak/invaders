@@ -31,5 +31,4 @@ public class MissleController : MonoBehaviour
       Debug.LogError($"Missile {gameObject.name} has collided with {collision.gameObject.name}:{collision.tag} but there is no handler");
     }
   }
-
 }
