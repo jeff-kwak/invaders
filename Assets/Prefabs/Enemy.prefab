@@ -10,10 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 5915541256039740858}
   - component: {fileID: 5915541256039740857}
+  - component: {fileID: -875341441607732648}
   - component: {fileID: 8020100089986681775}
   m_Layer: 0
   m_Name: Enemy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,6 +52,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Command: {fileID: 11400000, guid: 48e38e7dae13ca14fbc46cb643747dbb, type: 2}
   Event: {fileID: 11400000, guid: eebedf016c94b904484680c4239ad580, type: 2}
+--- !u!50 &-875341441607732648
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5915541256039740856}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!61 &8020100089986681775
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -61,7 +83,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.0041277707, y: 0.24345449}

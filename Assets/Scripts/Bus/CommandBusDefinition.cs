@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public delegate void CommandBusHandler();
@@ -11,6 +12,7 @@ public class CommandBusDefinition : ScriptableObject
   public event CommandBusHandler OnPlayerMoveLeft;
   public event CommandBusHandler OnPlayerMoveRight;
   public event CommandBusHandler OnPlayerStop;
+  public event CommandBusHandler OnPlayerFire;
 
   public void RequestSceneTransitionLeave()
   {
@@ -40,5 +42,10 @@ public class CommandBusDefinition : ScriptableObject
   public void RequestPlayerStop()
   {
     OnPlayerStop?.Invoke();
+  }
+
+  public void RequestPlayerFire()
+  {
+    OnPlayerFire?.Invoke();
   }
 }

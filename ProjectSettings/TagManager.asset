@@ -7,6 +7,10 @@ TagManager:
   - LeftBorder
   - RightBorder
   - Ground
+  - Enemy
+  - Missile
+  - Bomb
+  - Roof
   layers:
   - Default
   - TransparentFX

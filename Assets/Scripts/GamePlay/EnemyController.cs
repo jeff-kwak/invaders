@@ -32,10 +32,13 @@ public class EnemyController : MonoBehaviour
     {
       Event.RaiseOnCollisionWithRightWall();
     }
+    else if(collision.CompareTag("Missile"))
+    {
+      Debug.Log($"{gameObject.name} hit by missile");
+    }
     else
     {
-      Debug.LogError($"{gameObject.name} entered trigger {collision.gameObject.name} but there was no handler");
+      Debug.LogError($"{gameObject.name} entered trigger {collision.gameObject.name}: {collision.tag} but there was no handler");
     }
-
   }
 }

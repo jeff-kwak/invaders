@@ -83,6 +83,13 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnSceneTransitionEnterCompleted += EventBus_OnSceneTransitionEnterCompleted;
     EventBus.OnCollisionWithLeftWall += EventBus_OnCollisionWithLeftWall;
     EventBus.OnCollisionWithRightWall += EventBus_OnCollisionWithRightWall;
+    EventBus.OnMissileHitEnemy += EventBus_OnMissileHitEnemy;
+  }
+
+  private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
+  {
+    enemy.SetActive(false);
+    missile.SetActive(false);
   }
 
   private void ChangeDirectionToRight()
@@ -109,6 +116,7 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnSceneTransitionEnterCompleted -= EventBus_OnSceneTransitionEnterCompleted;
     EventBus.OnCollisionWithLeftWall -= EventBus_OnCollisionWithLeftWall;
     EventBus.OnCollisionWithRightWall -= EventBus_OnCollisionWithRightWall;
+    EventBus.OnMissileHitEnemy -= EventBus_OnMissileHitEnemy;
   }
 
   private void Start()
@@ -165,6 +173,11 @@ public class PrimaryGameController : MonoBehaviour
     {
       CommandBus.RequestPlayerStop();
     }    
+  }
+
+  private void OnFire(InputValue inputValue)
+  {
+    CommandBus.RequestPlayerFire();
   }
 
   private void EventBus_OnSceneTransitionEnterCompleted()

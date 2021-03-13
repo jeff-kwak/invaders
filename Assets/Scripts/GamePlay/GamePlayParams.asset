@@ -17,3 +17,5 @@ MonoBehaviour:
   PlayerSpeed: 1
   PlayerLeftLimit: -5
   PlayerRightLimit: 5
+  PlayerFireLimit: 3
+  MissleSpeed: 4

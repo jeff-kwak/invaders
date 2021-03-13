@@ -10,7 +10,7 @@ x ART: laser cannon with layers
 x ART: missile and bomb
 x CODE: Enemy setup and locomotion
 x CODE: Player locomotion
-* CODE: Fire missiles destroy enemies
+x CODE: Fire missiles destroy enemies
 * CODE: Drop bombs from enemies
 * CODE: Shields provide cover
   - Collisions with bombs destroy part of the shield
