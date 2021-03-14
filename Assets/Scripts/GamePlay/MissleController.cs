@@ -21,6 +21,11 @@ public class MissleController : MonoBehaviour
       Debug.Log($"Missle has collided with {collision.gameObject.name}");
       EventBus.RaiseMissileHitEnemy(gameObject, collision.gameObject);
     }
+    else if(collision.CompareTag("Shield"))
+    {
+      Debug.Log($"Missile has hit the shield");
+      EventBus.RaiseOnMissileHitShield(gameObject, collision.gameObject);
+    }
     else if(collision.CompareTag("Roof"))
     {
       Debug.Log($"Missile has missled");

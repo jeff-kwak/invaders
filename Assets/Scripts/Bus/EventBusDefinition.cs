@@ -15,7 +15,10 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler OnCollisionWithLeftWall;
   public event EventBusHandler OnCollisionWithRightWall;
   public event EventBusHandler<GameObject, GameObject> OnMissileHitEnemy;
+  public event EventBusHandler<GameObject, GameObject> OnMissileHitShield;
   public event EventBusHandler<GameObject, GameObject> OnBombHitPlayer;
+  public event EventBusHandler<GameObject, GameObject> OnBombHitShield;
+  public event EventBusHandler<GameObject, GameObject> OnEnemyHitShield;
 
   public void RaiseOnPlayClicked()
   {
@@ -55,5 +58,20 @@ public class EventBusDefinition : ScriptableObject
   public void RaiseOnCollisionWithRightWall()
   {
     OnCollisionWithRightWall?.Invoke();
+  }
+
+  public void RaiseOnBombHitShield(GameObject bomb, GameObject grid)
+  {
+    OnBombHitShield?.Invoke(bomb, grid);
+  }
+
+  public void RaiseOnMissileHitShield(GameObject missile, GameObject grid)
+  {
+    OnMissileHitShield?.Invoke(missile, grid);
+  }
+
+  internal void RaiseOnEnemyHitShield(GameObject enemy, GameObject grid)
+  {
+    OnEnemyHitShield?.Invoke(enemy, grid);
   }
 }

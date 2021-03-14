@@ -1,9 +1,7 @@
 using Gr8tGames;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Tilemaps;
 
 public class PrimaryGameController : MonoBehaviour
 {
@@ -38,8 +36,6 @@ public class PrimaryGameController : MonoBehaviour
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float accumulatedMoveDistance = 0f;
-  private State LastMovementState = State.MoveLeft;
-
 
   private void Awake()
   {
@@ -83,7 +79,10 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnCollisionWithLeftWall += EventBus_OnCollisionWithLeftWall;
     EventBus.OnCollisionWithRightWall += EventBus_OnCollisionWithRightWall;
     EventBus.OnMissileHitEnemy += EventBus_OnMissileHitEnemy;
+    EventBus.OnMissileHitShield += EventBus_OnMissileHitShield;
     EventBus.OnBombHitPlayer += EventBus_OnBombHitPlayer;
+    EventBus.OnBombHitShield += EventBus_OnBombHitShield;
+    EventBus.OnEnemyHitShield += EventBus_OnEnemyHitShield;
   }
 
   private void OnDestroy()
@@ -93,6 +92,8 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnCollisionWithRightWall -= EventBus_OnCollisionWithRightWall;
     EventBus.OnMissileHitEnemy -= EventBus_OnMissileHitEnemy;
     EventBus.OnBombHitPlayer -= EventBus_OnBombHitPlayer;
+    EventBus.OnBombHitShield -= EventBus_OnBombHitShield;
+    EventBus.OnEnemyHitShield -= EventBus_OnEnemyHitShield;
   }
 
   private void Start()
@@ -209,5 +210,29 @@ public class PrimaryGameController : MonoBehaviour
     player.SetActive(false);
     bomb.SetActive(false);
     Invoke(nameof(ResumeAfterRespawn), GamePlay.RespawnTime);
+  }
+
+  private void EventBus_OnBombHitShield(GameObject bomb, GameObject grid)
+  {
+    EraseShieldCell(grid, bomb.transform.position + new Vector3(0, -0.05f, 0));
+    bomb.SetActive(false);
+  }
+
+  private void EventBus_OnMissileHitShield(GameObject missile, GameObject grid)
+  {
+    EraseShieldCell(grid, missile.transform.position + new Vector3(0, 0.05f, 0));
+    missile.SetActive(false);
+  }
+
+  private void EventBus_OnEnemyHitShield(GameObject enemy, GameObject grid)
+  {
+    EraseShieldCell(grid, enemy.transform.position);
+  }
+
+  private void EraseShieldCell(GameObject gridGameObject, Vector3 worldPosition)
+  {
+    var tilemap = gridGameObject.GetComponent<Tilemap>();
+    var cell = tilemap?.WorldToCell(worldPosition);
+    tilemap?.SetTile(cell ?? Vector3Int.zero, null);
   }
 }

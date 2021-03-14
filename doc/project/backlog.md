@@ -13,15 +13,14 @@ x CODE: Player locomotion
 x CODE: Fire missiles destroy enemies
 x CODE: Drop bombs from enemies
   - CODE: Bombs destroy player
-* CODE: Shields provide cover
+x CODE: Shields provide cover
   - Collisions with bombs destroy part of the shield
   - Collisions with missiles destroy part of the shield
   - Collisions with mobs destroy part of the shield
-  - Collisions with mobs destroy the mob
-  - Collisions with player destroy the mob and the player
-* CODE: Game Over when player is out of lives
-* CODE: Game Over when mob reaches bottom
-* CODE: Play again after Game Over
+* CODE: Implement Game Over conditions
+  * Game Over when player is out of lives
+  * Game Over when mob reaches bottom or collides with player
+  * Play again after Game Over
 * CODE: Implement waves and grid and enemy reset
 * CODE: Enemies increase speed when there are fewer.
   - Probably step wise
@@ -34,6 +33,7 @@ x CODE: Drop bombs from enemies
 * SOUND: Bomb dropping and explosions
 * SOUND: UFO sound
 * SOUND: Game over sound/music
+* ART: Animations for enemy players
 * ART: Particle for enemy explosions
 * ART: Particle for shield explosions
 * ART: Particle for player explosion
@@ -41,6 +41,7 @@ x CODE: Drop bombs from enemies
 * ART: Redesign main menu
 * INFRA: Build for WebGL and release
 ---
-* ART: Playing background
+* ART: Background for the 
+* CODE: Damaged shield tiles and border tiles (rule tiles)
 * CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
 * CODE: Delay respawn if bomb is about to hit player

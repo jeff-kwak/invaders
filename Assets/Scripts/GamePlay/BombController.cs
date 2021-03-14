@@ -24,6 +24,11 @@ public class BombController : MonoBehaviour
       Debug.Log($"Player has collided with {collision.gameObject.name}:{collision.tag}");
       EventBus.RaiseOnBombHitPlayer(gameObject, collision.gameObject);
     }
+    else if(collision.CompareTag("Shield"))
+    {
+      Debug.Log($"Bomb {gameObject.name}:{gameObject.tag} has hit the shield at {gameObject.transform.position}");
+      EventBus.RaiseOnBombHitShield(gameObject, collision.gameObject);
+    }
     else if (collision.CompareTag("Ground"))
     {
       Debug.Log($"Bomb has missed");

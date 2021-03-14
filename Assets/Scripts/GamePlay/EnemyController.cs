@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -68,13 +69,21 @@ public class EnemyController : MonoBehaviour
     {
       Debug.Log($"{gameObject.name} hit by missile");
     }
-    else if(collision.CompareTag("Bomb"))
+    else if(collision.CompareTag("Bomb") || collision.CompareTag("Shield"))
     {
       // no-operation
     }
     else
     {
       Debug.LogError($"{gameObject.name} entered trigger {collision.gameObject.name}: {collision.tag} but there was no handler");
+    }
+  }
+
+  private void OnTriggerStay2D(Collider2D collision)
+  {
+    if(collision.CompareTag("Shield"))
+    {
+      Event.RaiseOnEnemyHitShield(gameObject, collision.gameObject);
     }
   }
 }
