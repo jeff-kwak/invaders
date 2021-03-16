@@ -17,4 +17,5 @@ public class GamePlayDefinition : ScriptableObject
   public float MinTimeBetweenBombs = 2f; // seconds
   public float MaxTimeBetweenBombs = 10f; // bomb/s
   public float RespawnTime = 3f; // seconds
+  public int InitialNumberOfLives = 3;
 }

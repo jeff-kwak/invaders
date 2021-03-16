@@ -19,6 +19,8 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler<GameObject, GameObject> OnBombHitPlayer;
   public event EventBusHandler<GameObject, GameObject> OnBombHitShield;
   public event EventBusHandler<GameObject, GameObject> OnEnemyHitShield;
+  public event EventBusHandler<int> OnPlayerDead;
+  public event EventBusHandler OnGameOver;
 
   public void RaiseOnPlayClicked()
   {
@@ -73,5 +75,15 @@ public class EventBusDefinition : ScriptableObject
   internal void RaiseOnEnemyHitShield(GameObject enemy, GameObject grid)
   {
     OnEnemyHitShield?.Invoke(enemy, grid);
+  }
+
+  internal void RaisePlayerDead(int livesRemaining)
+  {
+    OnPlayerDead?.Invoke(livesRemaining);
+  }
+
+  internal void RaiseGameOver()
+  {
+    OnGameOver?.Invoke();
   }
 }

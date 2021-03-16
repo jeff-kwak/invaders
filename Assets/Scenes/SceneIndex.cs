@@ -5,5 +5,6 @@ using UnityEngine;
 public enum SceneIndex
 {
   MainMenu = 0,
-  Primary = 1
+  Primary = 1,
+  GameOver = 2
 }

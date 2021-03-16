@@ -17,10 +17,11 @@ x CODE: Shields provide cover
   - Collisions with bombs destroy part of the shield
   - Collisions with missiles destroy part of the shield
   - Collisions with mobs destroy part of the shield
-* CODE: Implement Game Over conditions
+x CODE: Implement Game Over conditions
   * Game Over when player is out of lives
   * Game Over when mob reaches bottom or collides with player
   * Play again after Game Over
+* ART: Animations for enemy players
 * CODE: Implement waves and grid and enemy reset
 * CODE: Enemies increase speed when there are fewer.
   - Probably step wise
@@ -33,7 +34,6 @@ x CODE: Shields provide cover
 * SOUND: Bomb dropping and explosions
 * SOUND: UFO sound
 * SOUND: Game over sound/music
-* ART: Animations for enemy players
 * ART: Particle for enemy explosions
 * ART: Particle for shield explosions
 * ART: Particle for player explosion

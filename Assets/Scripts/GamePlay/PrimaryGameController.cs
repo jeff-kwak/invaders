@@ -1,6 +1,7 @@
 using Gr8tGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 public class PrimaryGameController : MonoBehaviour
@@ -18,27 +19,33 @@ public class PrimaryGameController : MonoBehaviour
     MoveLeft,
     MoveRight,
     MoveDownOnLeft,
-    MoveDownOnRight
+    MoveDownOnRight,
+    GameOver
   }
 
   private enum Trigger
   {
     Setup,
     SetupComplete,
-    SceneTransitionComplete,
+    SceneTransitionEnterComplete,
     MoveEnemy,
     LeftWallCollision,
     RightWallCollision,
     EnemyHasMovedDown,
     EnemyHasTravelledDropDistance,
+    PlayerOutOfLives,
+    SceneTransitionLeaveComplete
   }
 
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float accumulatedMoveDistance = 0f;
+  private int LivesRemaining = 0;
 
   private void Awake()
   {
+    LivesRemaining = GamePlay.InitialNumberOfLives;
+
     Machine = new StateMachine<State, Trigger>(State.Start);
 
     Machine.Configure(State.Start)
@@ -50,29 +57,36 @@ public class PrimaryGameController : MonoBehaviour
 
     Machine.Configure(State.Ready)
       .OnEnter(RequestSceneTransition)
-      .Permit(Trigger.SceneTransitionComplete, State.MoveLeft);
+      .Permit(Trigger.SceneTransitionEnterComplete, State.MoveLeft);
 
     Machine.Configure(State.MoveLeft)
       .OnEnter(ChangeDirectionToLeft)
+      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveLeft)
       .Permit(Trigger.LeftWallCollision, State.MoveDownOnLeft);
 
     Machine.Configure(State.MoveDownOnLeft)
       .OnEnter(ChangeDirectionToDown)
+      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveRight);
 
     Machine.Configure(State.MoveRight)
       .OnEnter(ChangeDirectionToRight)
+      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveRight)
       .Permit(Trigger.RightWallCollision, State.MoveDownOnRight);
 
     Machine.Configure(State.MoveDownOnRight)
       .OnEnter(ChangeDirectionToDown)
+      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveLeft);
+
+    Machine.Configure(State.GameOver)
+       .OnEnter(OnEnterGameOver);
 
 
     EventBus.OnSceneTransitionEnterCompleted += EventBus_OnSceneTransitionEnterCompleted;
@@ -83,6 +97,7 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnBombHitPlayer += EventBus_OnBombHitPlayer;
     EventBus.OnBombHitShield += EventBus_OnBombHitShield;
     EventBus.OnEnemyHitShield += EventBus_OnEnemyHitShield;
+    EventBus.OnSceneTransitionLeaveCompleted += EventBus_OnSceneTransitionLeaveCompleted;
   }
 
   private void OnDestroy()
@@ -140,7 +155,7 @@ public class PrimaryGameController : MonoBehaviour
   private void AccumulateMoveDistance()
   {
     var delta = GamePlay.EnemySpeed * Time.deltaTime;
-    if(accumulatedMoveDistance < GamePlay.EnemyDropDistance && accumulatedMoveDistance + delta >= GamePlay.EnemyDropDistance)
+    if (accumulatedMoveDistance < GamePlay.EnemyDropDistance && accumulatedMoveDistance + delta >= GamePlay.EnemyDropDistance)
     {
       Machine.Fire(Trigger.EnemyHasTravelledDropDistance);
     }
@@ -162,19 +177,19 @@ public class PrimaryGameController : MonoBehaviour
   private void OnMove(InputValue inputValue)
   {
     var leftRightInput = inputValue.Get<Vector2>().x;
-    
-    if(leftRightInput < 0)
+
+    if (leftRightInput < 0)
     {
       CommandBus.RequestPlayerMoveLeft();
     }
-    else if(leftRightInput > 0)
+    else if (leftRightInput > 0)
     {
       CommandBus.RequestPlayerMoveRight();
     }
     else
     {
       CommandBus.RequestPlayerStop();
-    }    
+    }
   }
 
   // Message from the Input System
@@ -186,11 +201,11 @@ public class PrimaryGameController : MonoBehaviour
   private void EventBus_OnSceneTransitionEnterCompleted()
   {
     Debug.Log("Scene tranisition enter complete");
-    Machine.Fire(Trigger.SceneTransitionComplete);
+    Machine.Fire(Trigger.SceneTransitionEnterComplete);
   }
 
   private void EventBus_OnCollisionWithRightWall()
-  {    
+  {
     Machine.Fire(Trigger.RightWallCollision, () => Debug.Log("collision with right wall"));
   }
 
@@ -209,7 +224,23 @@ public class PrimaryGameController : MonoBehaviour
   {
     player.SetActive(false);
     bomb.SetActive(false);
-    Invoke(nameof(ResumeAfterRespawn), GamePlay.RespawnTime);
+    LivesRemaining--;
+    EventBus.RaisePlayerDead(LivesRemaining);
+    if (LivesRemaining <= 0)
+    {
+      Machine.Fire(Trigger.PlayerOutOfLives);
+    }
+    else
+    {
+      Invoke(nameof(ResumeAfterRespawn), GamePlay.RespawnTime);
+    }
+  }
+
+  private void OnEnterGameOver()
+  {
+    Debug.Log("Game Over!");
+    EventBus.RaiseGameOver();
+    CommandBus.RequestSceneTransitionLeave();
   }
 
   private void EventBus_OnBombHitShield(GameObject bomb, GameObject grid)
@@ -227,6 +258,11 @@ public class PrimaryGameController : MonoBehaviour
   private void EventBus_OnEnemyHitShield(GameObject enemy, GameObject grid)
   {
     EraseShieldCell(grid, enemy.transform.position);
+  }
+
+  private void EventBus_OnSceneTransitionLeaveCompleted()
+  {
+    SceneManager.LoadScene((int)SceneIndex.GameOver);
   }
 
   private void EraseShieldCell(GameObject gridGameObject, Vector3 worldPosition)
