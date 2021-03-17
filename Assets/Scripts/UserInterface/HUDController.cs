@@ -16,12 +16,15 @@ public class HUDController : MonoBehaviour
   {
     EventBus.OnPlayerDead += EventBus_OnPlayerDead;
     EventBus.OnWaveCleared += EventBus_OnWaveCleared;
+    EventBus.OnScoreChanged += EventBus_OnScoreChanged;
     WaveAnnouncementText = WaveAnnouncement.GetComponent<TMP_Text>();
   }
 
   private void OnDestroy()
   {
     EventBus.OnPlayerDead -= EventBus_OnPlayerDead;
+    EventBus.OnWaveCleared -= EventBus_OnWaveCleared;
+    EventBus.OnScoreChanged -= EventBus_OnScoreChanged;
   }
 
   private void Start()
@@ -35,6 +38,12 @@ public class HUDController : MonoBehaviour
   {
     UpdateLivesRemaining(livesRemaining);
   }
+
+  private void EventBus_OnScoreChanged(int points)
+  {
+    ScoreText.text = points.ToString("0000000");
+  }
+
 
   private void UpdateLivesRemaining(int lives)
   {

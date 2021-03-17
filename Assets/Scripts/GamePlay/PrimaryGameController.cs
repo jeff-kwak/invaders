@@ -33,7 +33,7 @@ public class PrimaryGameController : MonoBehaviour
     RightWallCollision,
     EnemyHasMovedDown,
     EnemyHasTravelledDropDistance,
-    PlayerOutOfLives,
+    GameOver,
     SceneTransitionLeaveComplete,
     WaveCleared
   }
@@ -47,6 +47,7 @@ public class PrimaryGameController : MonoBehaviour
   private const int StartingNumberOfEnemies = 60;
   private int EnemiesRemaining = 0;
   private int WaveNumber = 1;
+  private int Score = 0;
 
   private void Awake()
   {
@@ -64,14 +65,14 @@ public class PrimaryGameController : MonoBehaviour
     Machine.Configure(State.MoveLeft)
       .OnEnter(ChangeDirectionToLeft)
       .Permit(Trigger.WaveCleared, State.Setup)
-      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
+      .Permit(Trigger.GameOver, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveLeft)
       .Permit(Trigger.LeftWallCollision, State.MoveDownOnLeft);
 
     Machine.Configure(State.MoveDownOnLeft)
       .OnEnter(ChangeDirectionToDown)
       .Permit(Trigger.WaveCleared, State.Setup)
-      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
+      .Permit(Trigger.GameOver, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveRight);
@@ -79,14 +80,14 @@ public class PrimaryGameController : MonoBehaviour
     Machine.Configure(State.MoveRight)
       .OnEnter(ChangeDirectionToRight)
       .Permit(Trigger.WaveCleared, State.Setup)
-      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
+      .Permit(Trigger.GameOver, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveRight)
       .Permit(Trigger.RightWallCollision, State.MoveDownOnRight);
 
     Machine.Configure(State.MoveDownOnRight)
       .OnEnter(ChangeDirectionToDown)
       .Permit(Trigger.WaveCleared, State.Setup)
-      .Permit(Trigger.PlayerOutOfLives, State.GameOver)
+      .Permit(Trigger.GameOver, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasTravelledDropDistance, State.MoveLeft);
@@ -103,6 +104,7 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnBombHitShield += EventBus_OnBombHitShield;
     EventBus.OnEnemyHitShield += EventBus_OnEnemyHitShield;
     EventBus.OnSceneTransitionLeaveCompleted += EventBus_OnSceneTransitionLeaveCompleted;
+    EventBus.OnEnemyHasReachedTheBase += EventBus_OnEnemyHasReachedTheBase;
   }
 
   private void OnDestroy()
@@ -114,6 +116,8 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnBombHitPlayer -= EventBus_OnBombHitPlayer;
     EventBus.OnBombHitShield -= EventBus_OnBombHitShield;
     EventBus.OnEnemyHitShield -= EventBus_OnEnemyHitShield;
+    EventBus.OnSceneTransitionLeaveCompleted -= EventBus_OnSceneTransitionLeaveCompleted;
+    EventBus.OnEnemyHasReachedTheBase -= EventBus_OnEnemyHasReachedTheBase;
   }
 
   private void Start()
@@ -230,6 +234,9 @@ public class PrimaryGameController : MonoBehaviour
   {
     enemy.SetActive(false);
     missile.SetActive(false);
+    var worthPoints = enemy.GetComponent<WorthPoints>();
+    Score += worthPoints != null ? worthPoints.PointValue : 0;
+    EventBus.RaiseScoreChanged(Score);
     EnemiesRemaining -= 1;
     if(EnemiesRemaining == 0)
     {
@@ -250,16 +257,22 @@ public class PrimaryGameController : MonoBehaviour
   {
     player.SetActive(false);
     bomb.SetActive(false);
-    LivesRemaining--;
-    EventBus.RaisePlayerDead(LivesRemaining);
+    //LivesRemaining--;
+    //EventBus.RaisePlayerDead(LivesRemaining);
     if (LivesRemaining <= 0)
     {
-      Machine.Fire(Trigger.PlayerOutOfLives);
+      Machine.Fire(Trigger.GameOver);
     }
     else
     {
       Invoke(nameof(ResumeAfterRespawn), GamePlay.RespawnTime);
     }
+  }
+
+
+  private void EventBus_OnEnemyHasReachedTheBase()
+  {
+    Machine.Fire(Trigger.GameOver);
   }
 
   private void OnEnterGameOver()

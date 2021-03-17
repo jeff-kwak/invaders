@@ -22,6 +22,8 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler<int> OnPlayerDead;
   public event EventBusHandler OnGameOver;
   public event EventBusHandler<int> OnWaveCleared;
+  public event EventBusHandler<int> OnScoreChanged;
+  public event EventBusHandler OnEnemyHasReachedTheBase;
 
   public void RaiseOnPlayClicked()
   {
@@ -58,6 +60,11 @@ public class EventBusDefinition : ScriptableObject
     OnCollisionWithLeftWall?.Invoke();
   }
 
+  public void RaiseEnemyHasReachedTheBase()
+  {
+    OnEnemyHasReachedTheBase?.Invoke();
+  }
+
   public void RaiseOnCollisionWithRightWall()
   {
     OnCollisionWithRightWall?.Invoke();
@@ -91,5 +98,10 @@ public class EventBusDefinition : ScriptableObject
   internal void RaiseWaveCleared(int waveNumber)
   {
     OnWaveCleared?.Invoke(waveNumber);
+  }
+
+  internal void RaiseScoreChanged(int points)
+  {
+    OnScoreChanged?.Invoke(points);
   }
 }

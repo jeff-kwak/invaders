@@ -73,6 +73,10 @@ public class EnemyController : MonoBehaviour
     {
       // no-operation
     }
+    else if(collision.CompareTag("Ground") || collision.CompareTag("Player"))
+    {
+      Event.RaiseEnemyHasReachedTheBase();
+    }
     else
     {
       Debug.LogError($"{gameObject.name} entered trigger {collision.gameObject.name}: {collision.tag} but there was no handler");
