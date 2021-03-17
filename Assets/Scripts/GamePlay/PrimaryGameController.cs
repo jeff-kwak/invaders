@@ -34,13 +34,17 @@ public class PrimaryGameController : MonoBehaviour
     EnemyHasMovedDown,
     EnemyHasTravelledDropDistance,
     PlayerOutOfLives,
-    SceneTransitionLeaveComplete
+    SceneTransitionLeaveComplete,
+    WaveCleared
   }
 
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float accumulatedMoveDistance = 0f;
   private int LivesRemaining = 0;
+  private const int StartingNumberOfEnemies = 60;
+  private int EnemiesRemaining = 0;
+  private int WaveNumber = 1;
 
   private void Awake()
   {
@@ -49,24 +53,22 @@ public class PrimaryGameController : MonoBehaviour
     Machine = new StateMachine<State, Trigger>(State.Start);
 
     Machine.Configure(State.Start)
-      .Permit(Trigger.Setup, State.Ready);
+      .Permit(Trigger.SceneTransitionEnterComplete, State.Setup);
 
     Machine.Configure(State.Setup)
       .OnEnter(SetupGame)
-      .Permit(Trigger.SetupComplete, State.Ready);
-
-    Machine.Configure(State.Ready)
-      .OnEnter(RequestSceneTransition)
-      .Permit(Trigger.SceneTransitionEnterComplete, State.MoveLeft);
+      .Permit(Trigger.SetupComplete, State.MoveLeft);
 
     Machine.Configure(State.MoveLeft)
       .OnEnter(ChangeDirectionToLeft)
+      .Permit(Trigger.WaveCleared, State.Setup)
       .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveLeft)
       .Permit(Trigger.LeftWallCollision, State.MoveDownOnLeft);
 
     Machine.Configure(State.MoveDownOnLeft)
       .OnEnter(ChangeDirectionToDown)
+      .Permit(Trigger.WaveCleared, State.Setup)
       .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnLeft)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnLeft)
@@ -74,12 +76,14 @@ public class PrimaryGameController : MonoBehaviour
 
     Machine.Configure(State.MoveRight)
       .OnEnter(ChangeDirectionToRight)
+      .Permit(Trigger.WaveCleared, State.Setup)
       .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveRight)
       .Permit(Trigger.RightWallCollision, State.MoveDownOnRight);
 
     Machine.Configure(State.MoveDownOnRight)
       .OnEnter(ChangeDirectionToDown)
+      .Permit(Trigger.WaveCleared, State.Setup)
       .Permit(Trigger.PlayerOutOfLives, State.GameOver)
       .Permit(Trigger.MoveEnemy, State.MoveDownOnRight)
       .Permit(Trigger.EnemyHasMovedDown, State.MoveDownOnRight)
@@ -87,7 +91,6 @@ public class PrimaryGameController : MonoBehaviour
 
     Machine.Configure(State.GameOver)
        .OnEnter(OnEnterGameOver);
-
 
     EventBus.OnSceneTransitionEnterCompleted += EventBus_OnSceneTransitionEnterCompleted;
     EventBus.OnCollisionWithLeftWall += EventBus_OnCollisionWithLeftWall;
@@ -113,7 +116,7 @@ public class PrimaryGameController : MonoBehaviour
 
   private void Start()
   {
-    Machine.Fire(Trigger.Setup);
+    CommandBus.RequestSceneTransitionEnter();
   }
 
   private void Update()
@@ -143,13 +146,18 @@ public class PrimaryGameController : MonoBehaviour
 
   private void SetupGame()
   {
-    EnemyGrid.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
-    Machine.Fire(Trigger.SetupComplete);
+    Debug.Log("SetupGame");
+    Invoke(nameof(DelayedSetup), GamePlay.WaveAnnouncementTime);
   }
 
-  private void RequestSceneTransition()
+  private void DelayedSetup()
   {
-    CommandBus.RequestSceneTransitionEnter();
+    Debug.Log("Delayed setup enter");
+    EnemyGrid.SetActive(true);
+    EnemyGrid.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
+    EnemiesRemaining = StartingNumberOfEnemies;
+    CommandBus.RequestEnemyReset();
+    Machine.Fire(Trigger.SetupComplete);
   }
 
   private void AccumulateMoveDistance()
@@ -218,6 +226,12 @@ public class PrimaryGameController : MonoBehaviour
   {
     enemy.SetActive(false);
     missile.SetActive(false);
+    EnemiesRemaining -= 1;
+    if(EnemiesRemaining <= 0)
+    {
+      Machine.Fire(Trigger.WaveCleared, () => EventBus.RaiseWaveCleared(WaveNumber));
+      WaveNumber++;
+    }
   }
 
   private void EventBus_OnBombHitPlayer(GameObject bomb, GameObject player)

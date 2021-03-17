@@ -21,6 +21,7 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler<GameObject, GameObject> OnEnemyHitShield;
   public event EventBusHandler<int> OnPlayerDead;
   public event EventBusHandler OnGameOver;
+  public event EventBusHandler<int> OnWaveCleared;
 
   public void RaiseOnPlayClicked()
   {
@@ -85,5 +86,10 @@ public class EventBusDefinition : ScriptableObject
   internal void RaiseGameOver()
   {
     OnGameOver?.Invoke();
+  }
+
+  internal void RaiseWaveCleared(int waveNumber)
+  {
+    OnWaveCleared?.Invoke(waveNumber);
   }
 }

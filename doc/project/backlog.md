@@ -22,7 +22,7 @@ x CODE: Implement Game Over conditions
   * Game Over when mob reaches bottom or collides with player
   * Play again after Game Over
 x ART: Animations for enemy players
-* CODE: Implement waves and grid and enemy reset
+x CODE: Implement waves and grid and enemy reset
 * CODE: Enemies increase speed when there are fewer.
   - Probably step wise
   - Maybe with 3 levels. Normal, Medium, and 1-Left.
@@ -48,3 +48,4 @@ x ART: Animations for enemy players
 * CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
 * CODE: Delay respawn if bomb is about to hit player
 * ART: Cause animations to start at different times
+* CODE: Enter wave restores some shields
