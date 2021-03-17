@@ -21,7 +21,7 @@ x CODE: Implement Game Over conditions
   * Game Over when player is out of lives
   * Game Over when mob reaches bottom or collides with player
   * Play again after Game Over
-* ART: Animations for enemy players
+x ART: Animations for enemy players
 * CODE: Implement waves and grid and enemy reset
 * CODE: Enemies increase speed when there are fewer.
   - Probably step wise
@@ -29,7 +29,8 @@ x CODE: Implement Game Over conditions
 * CODE: Implement scoring
 * CODE: UFO spawn and locomotion
 * CODE: UFO drops bombs
-* SOUND: Background music matches enemy speed
+* SOUND: Background music
+  -  matches enemy speed
 * SOUND: Missile firing and explosions
 * SOUND: Bomb dropping and explosions
 * SOUND: UFO sound
@@ -39,9 +40,11 @@ x CODE: Implement Game Over conditions
 * ART: Particle for player explosion
 * ART: Particle for missed bomb explosion
 * ART: Redesign main menu
+  - play background music as well
 * INFRA: Build for WebGL and release
 ---
-* ART: Background for the 
+* ART: Background for the game play screen
 * CODE: Damaged shield tiles and border tiles (rule tiles)
 * CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
 * CODE: Delay respawn if bomb is about to hit player
+* ART: Cause animations to start at different times
