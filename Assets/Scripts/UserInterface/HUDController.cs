@@ -38,7 +38,7 @@ public class HUDController : MonoBehaviour
 
   private void UpdateLivesRemaining(int lives)
   {
-    LivesRemainingText.text = $"Lives x {lives - 1}";
+    LivesRemainingText.text = $"Lives x {Mathf.Clamp(lives - 1, 0, GamePlay.InitialNumberOfLives)}";
   }
 
   private void EventBus_OnWaveCleared(int waveCleared)

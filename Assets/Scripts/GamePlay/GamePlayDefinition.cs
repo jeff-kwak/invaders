@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Game/GamePlay")]
@@ -19,4 +16,9 @@ public class GamePlayDefinition : ScriptableObject
   public float RespawnTime = 3f; // seconds
   public int InitialNumberOfLives = 3;
   public float WaveAnnouncementTime = 2f; // seconds
+  public float LevelMultiplierIncrement = 0.08f;
+  public float FirstStepSpeedMultiplier = 2f;
+  public float SecondStepSpeedMultiplier = 4f;
+  public int FirstStepEnemyCount = 25;
+  public int SecondStepEnemyCount = 3;
 }

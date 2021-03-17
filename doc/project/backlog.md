@@ -23,7 +23,7 @@ x CODE: Implement Game Over conditions
   * Play again after Game Over
 x ART: Animations for enemy players
 x CODE: Implement waves and grid and enemy reset
-* CODE: Enemies increase speed when there are fewer.
+x CODE: Enemies increase speed when there are fewer.
   - Probably step wise
   - Maybe with 3 levels. Normal, Medium, and 1-Left.
 * CODE: Implement scoring

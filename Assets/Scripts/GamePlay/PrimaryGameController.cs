@@ -40,6 +40,8 @@ public class PrimaryGameController : MonoBehaviour
 
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
+  private float CurrentEnemySpeedBase = 0f;
+  private float CurrentEnemySpeed = 0f; // u/s
   private float accumulatedMoveDistance = 0f;
   private int LivesRemaining = 0;
   private const int StartingNumberOfEnemies = 60;
@@ -153,6 +155,8 @@ public class PrimaryGameController : MonoBehaviour
   private void DelayedSetup()
   {
     Debug.Log("Delayed setup enter");
+    CurrentEnemySpeedBase = GamePlay.EnemySpeed * (1f + (WaveNumber - 1) * GamePlay.LevelMultiplierIncrement);
+    CurrentEnemySpeed = CurrentEnemySpeedBase;
     EnemyGrid.SetActive(true);
     EnemyGrid.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
     EnemiesRemaining = StartingNumberOfEnemies;
@@ -172,7 +176,7 @@ public class PrimaryGameController : MonoBehaviour
 
   private void MoveEnemy()
   {
-    var pos = EnemyGrid.transform.position + EnemyDirection * GamePlay.EnemySpeed * Time.deltaTime;
+    var pos = EnemyGrid.transform.position + EnemyDirection * CurrentEnemySpeed * Time.deltaTime;
     EnemyGrid.transform.SetPositionAndRotation(pos, Quaternion.identity);
   }
 
@@ -227,10 +231,18 @@ public class PrimaryGameController : MonoBehaviour
     enemy.SetActive(false);
     missile.SetActive(false);
     EnemiesRemaining -= 1;
-    if(EnemiesRemaining <= 0)
+    if(EnemiesRemaining == 0)
     {
       Machine.Fire(Trigger.WaveCleared, () => EventBus.RaiseWaveCleared(WaveNumber));
       WaveNumber++;
+    }
+    else if(EnemiesRemaining == GamePlay.SecondStepEnemyCount)
+    {
+      CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.SecondStepSpeedMultiplier;
+    }
+    else if(EnemiesRemaining == GamePlay.FirstStepEnemyCount)
+    {
+      CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.FirstStepSpeedMultiplier;
     }
   }
 
