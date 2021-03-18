@@ -23,3 +23,10 @@ MonoBehaviour:
   MinTimeBetweenBombs: 2
   MaxTimeBetweenBombs: 10
   RespawnTime: 3
+  InitialNumberOfLives: 3
+  WaveAnnouncementTime: 2
+  LevelMultiplierIncrement: 0.08
+  FirstStepSpeedMultiplier: 2
+  SecondStepSpeedMultiplier: 4
+  FirstStepEnemyCount: 25
+  SecondStepEnemyCount: 3

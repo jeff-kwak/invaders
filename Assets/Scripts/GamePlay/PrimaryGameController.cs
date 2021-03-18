@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
+[RequireComponent(typeof(SoundController))]
 public class PrimaryGameController : MonoBehaviour
 {
   public EventBusDefinition EventBus;
@@ -38,6 +39,7 @@ public class PrimaryGameController : MonoBehaviour
     WaveCleared
   }
 
+  private SoundController SoundController;
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float CurrentEnemySpeedBase = 0f;
@@ -51,6 +53,8 @@ public class PrimaryGameController : MonoBehaviour
 
   private void Awake()
   {
+    SoundController = GetComponent<SoundController>();
+
     LivesRemaining = GamePlay.InitialNumberOfLives;
 
     Machine = new StateMachine<State, Trigger>(State.Start);
@@ -159,6 +163,7 @@ public class PrimaryGameController : MonoBehaviour
   private void DelayedSetup()
   {
     Debug.Log("Delayed setup enter");
+    SoundController.PlaySlowEnemyMarch();
     CurrentEnemySpeedBase = GamePlay.EnemySpeed * (1f + (WaveNumber - 1) * GamePlay.LevelMultiplierIncrement);
     CurrentEnemySpeed = CurrentEnemySpeedBase;
     EnemyGrid.SetActive(true);
@@ -240,15 +245,18 @@ public class PrimaryGameController : MonoBehaviour
     EnemiesRemaining -= 1;
     if(EnemiesRemaining == 0)
     {
+      SoundController.StopPlayingEnemyMarch();
       Machine.Fire(Trigger.WaveCleared, () => EventBus.RaiseWaveCleared(WaveNumber));
       WaveNumber++;
     }
     else if(EnemiesRemaining == GamePlay.SecondStepEnemyCount)
     {
+      SoundController.PlayFastEnemyMarch();
       CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.SecondStepSpeedMultiplier;
     }
     else if(EnemiesRemaining == GamePlay.FirstStepEnemyCount)
     {
+      SoundController.PlayMediumEnemyMarch();
       CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.FirstStepSpeedMultiplier;
     }
   }
@@ -257,8 +265,8 @@ public class PrimaryGameController : MonoBehaviour
   {
     player.SetActive(false);
     bomb.SetActive(false);
-    //LivesRemaining--;
-    //EventBus.RaisePlayerDead(LivesRemaining);
+    LivesRemaining--;
+    EventBus.RaisePlayerDead(LivesRemaining);
     if (LivesRemaining <= 0)
     {
       Machine.Fire(Trigger.GameOver);

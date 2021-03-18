@@ -26,14 +26,11 @@ x CODE: Implement waves and grid and enemy reset
 x CODE: Enemies increase speed when there are fewer.
   - Probably step wise
   - Maybe with 3 levels. Normal, Medium, and 1-Left.
-X CODE: Implement scoring
-* CODE: UFO spawn and locomotion
-* CODE: UFO drops bombs
-* SOUND: Background music
+x CODE: Implement scoring
+X SOUND: Background music
   -  matches enemy speed
-* SOUND: Missile firing and explosions
-* SOUND: Bomb dropping and explosions
-* SOUND: UFO sound
+* SOUND: SFX Missile firing and explosions
+* SOUND: SFX Bomb dropping and explosions
 * SOUND: Game over sound/music
 * ART: Particle for enemy explosions
 * ART: Particle for shield explosions
@@ -44,10 +41,14 @@ X CODE: Implement scoring
 * INFRA: Build for WebGL and release
 ---
 * ART: Background for the game play screen
-* CODE: Enemy bonus life
-* SOUND: Sfx for 1up
-* CODE: Damaged shield tiles and border tiles (rule tiles)
-* CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
+* CODE: UFO spawn and locomotion
+* CODE: UFO drops bombs
+* SOUND: UFO sound
+* CODE: Player 1up
+  - SOUND: SFX for 1up
 * CODE: Delay respawn if bomb is about to hit player
 * ART: Cause animations to start at different times
+* CODE: Damaged shield tiles and border tiles (rule tiles)
+---
+* CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
 * CODE: Enter wave restores some shields

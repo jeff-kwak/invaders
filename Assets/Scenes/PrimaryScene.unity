@@ -4213,6 +4213,7 @@ GameObject:
   - component: {fileID: 1224560945}
   - component: {fileID: 1224560946}
   - component: {fileID: 1224560947}
+  - component: {fileID: 1224560948}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -4280,6 +4281,23 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1224560948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224560944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 05b00b3f5901c9e48b50078f15f10517, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MenuBackgroundMusic: {fileID: 11400000, guid: 85f8a5a7bd1eac544ac5ddce55475323, type: 2}
+  MenuClick: {fileID: 11400000, guid: cbc0231aa2acd354e94bcf357103de4a, type: 2}
+  SlowEnemyMarch: {fileID: 11400000, guid: 85f8a5a7bd1eac544ac5ddce55475323, type: 2}
+  MediumEnemyMarch: {fileID: 11400000, guid: 85b61909ce05328468ddb05e1912b734, type: 2}
+  FastEnemyMarch: {fileID: 11400000, guid: 566268dd88976f04dbfa05c6625bd6db, type: 2}
 --- !u!1001 &1257338458
 PrefabInstance:
   m_ObjectHideFlags: 0
