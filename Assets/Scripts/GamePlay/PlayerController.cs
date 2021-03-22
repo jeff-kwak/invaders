@@ -123,6 +123,7 @@ public class PlayerController : MonoBehaviour
   private void SpawnMissle()
   {
     Debug.Log("Missle fired!");
+    Event.RaiseMissleFired();
     var usedMissle = MissilePool.FirstOrDefault(m => !m.activeInHierarchy);
     var missile = usedMissle ?? MakeNewMissile();
     missile.transform.SetPositionAndRotation(MissileSpawnPoint.position, Quaternion.identity);

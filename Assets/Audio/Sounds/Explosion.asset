@@ -10,13 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2b4eecaac7012ef4099f03897bbc320f, type: 3}
-  m_Name: MenuClicks
+  m_Name: Explosion
   m_EditorClassIdentifier: 
   Clips:
-  - {fileID: 8300000, guid: 32d4b1811dda14a6cb9e059ee8ad17d2, type: 3}
+  - {fileID: 8300000, guid: 604be1ff81573f84086e504c93c943e1, type: 3}
+  - {fileID: 8300000, guid: 13ebf740aa189cb498c4c0273fdf87bf, type: 3}
+  - {fileID: 8300000, guid: 226deddc10f568446aaefbe0ca517ea7, type: 3}
+  - {fileID: 8300000, guid: 7d55a24a9d3ce9f4d836349337717dbb, type: 3}
+  - {fileID: 8300000, guid: 572d369d89ddc1e46afb4b08ffcb9819, type: 3}
   Output: {fileID: -2253745263192816379, guid: ee4ea52c3f9c033449e3a16fad03c0a5, type: 2}
   VolumeRange: {x: 1, y: 1}
-  PitchRange: {x: 0.9, y: 1.2}
-  SpatialBend: 0
+  PitchRange: {x: 1, y: 1.175576}
+  SpatialBend: 1
   IsLoop: 0
   IsOneShot: 1

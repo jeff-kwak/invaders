@@ -11,6 +11,9 @@ public class SoundController : SoundHandler
   public SoundDefinition SlowEnemyMarch;
   public SoundDefinition MediumEnemyMarch;
   public SoundDefinition FastEnemyMarch;
+  public SoundDefinition PewPew;
+  public SoundDefinition Explosion;
+  public SoundDefinition BombDrop;
 
   private AudioSource enemyMarch;
 
@@ -43,8 +46,23 @@ public class SoundController : SoundHandler
     enemyMarch = Play(FastEnemyMarch);
   }
 
-  internal void StopPlayingEnemyMarch()
+  public void StopPlayingEnemyMarch()
   {
     if (enemyMarch != null) Stop(enemyMarch);
+  }
+
+  public void PlayPewPew()
+  {
+    Play(PewPew);
+  }
+
+  public void PlayBombDrop()
+  {
+    Play(BombDrop);
+  }
+
+  public void PlayExplosion()
+  {
+    Play(Explosion);
   }
 }

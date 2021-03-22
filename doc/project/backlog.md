@@ -27,10 +27,11 @@ x CODE: Enemies increase speed when there are fewer.
   - Probably step wise
   - Maybe with 3 levels. Normal, Medium, and 1-Left.
 x CODE: Implement scoring
-X SOUND: Background music
+x SOUND: Background music
   -  matches enemy speed
-* SOUND: SFX Missile firing and explosions
-* SOUND: SFX Bomb dropping and explosions
+x SOUND: SFX
+  - Missile firing and explosions
+  - SFX Bomb dropping and explosions
 * SOUND: Game over sound/music
 * ART: Particle for enemy explosions
 * ART: Particle for shield explosions

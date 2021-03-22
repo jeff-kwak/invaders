@@ -109,6 +109,9 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnEnemyHitShield += EventBus_OnEnemyHitShield;
     EventBus.OnSceneTransitionLeaveCompleted += EventBus_OnSceneTransitionLeaveCompleted;
     EventBus.OnEnemyHasReachedTheBase += EventBus_OnEnemyHasReachedTheBase;
+    EventBus.OnMissileFired += EventBus_OnMissileFired;
+
+    CommandBus.OnBombDrop += CommandBus_OnBombDrop;
   }
 
   private void OnDestroy()
@@ -122,6 +125,8 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnEnemyHitShield -= EventBus_OnEnemyHitShield;
     EventBus.OnSceneTransitionLeaveCompleted -= EventBus_OnSceneTransitionLeaveCompleted;
     EventBus.OnEnemyHasReachedTheBase -= EventBus_OnEnemyHasReachedTheBase;
+    EventBus.OnMissileFired -= EventBus_OnMissileFired;
+    CommandBus.OnBombDrop -= CommandBus_OnBombDrop;
   }
 
   private void Start()
@@ -237,6 +242,7 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
   {
+    SoundController.PlayExplosion();
     enemy.SetActive(false);
     missile.SetActive(false);
     var worthPoints = enemy.GetComponent<WorthPoints>();
@@ -265,6 +271,7 @@ public class PrimaryGameController : MonoBehaviour
   {
     player.SetActive(false);
     bomb.SetActive(false);
+    SoundController.PlayExplosion();
     LivesRemaining--;
     EventBus.RaisePlayerDead(LivesRemaining);
     if (LivesRemaining <= 0)
@@ -292,12 +299,14 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnBombHitShield(GameObject bomb, GameObject grid)
   {
+    SoundController.PlayExplosion();
     EraseShieldCell(grid, bomb.transform.position + new Vector3(0, -0.05f, 0));
     bomb.SetActive(false);
   }
 
   private void EventBus_OnMissileHitShield(GameObject missile, GameObject grid)
   {
+    SoundController.PlayExplosion();
     EraseShieldCell(grid, missile.transform.position + new Vector3(0, 0.05f, 0));
     missile.SetActive(false);
   }
@@ -317,5 +326,15 @@ public class PrimaryGameController : MonoBehaviour
     var tilemap = gridGameObject.GetComponent<Tilemap>();
     var cell = tilemap?.WorldToCell(worldPosition);
     tilemap?.SetTile(cell ?? Vector3Int.zero, null);
+  }
+
+  private void CommandBus_OnBombDrop(Vector3 pos)
+  {
+    SoundController.PlayBombDrop();
+  }
+
+  private void EventBus_OnMissileFired()
+  {
+    SoundController.PlayPewPew();
   }
 }

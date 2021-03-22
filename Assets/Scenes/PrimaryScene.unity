@@ -4298,6 +4298,9 @@ MonoBehaviour:
   SlowEnemyMarch: {fileID: 11400000, guid: 85f8a5a7bd1eac544ac5ddce55475323, type: 2}
   MediumEnemyMarch: {fileID: 11400000, guid: 85b61909ce05328468ddb05e1912b734, type: 2}
   FastEnemyMarch: {fileID: 11400000, guid: 566268dd88976f04dbfa05c6625bd6db, type: 2}
+  PewPew: {fileID: 11400000, guid: 5cd489222aa5e3f4080f591cd02faa03, type: 2}
+  Explosion: {fileID: 11400000, guid: 34fc99d08d99c254b9f16a4026096fa3, type: 2}
+  BombDrop: {fileID: 11400000, guid: 9178fbe15487f194eb8b2757a7b370fc, type: 2}
 --- !u!1001 &1257338458
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -24,6 +24,8 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler<int> OnWaveCleared;
   public event EventBusHandler<int> OnScoreChanged;
   public event EventBusHandler OnEnemyHasReachedTheBase;
+  public event EventBusHandler OnMissileFired;
+  public event EventBusHandler OnBombDropped;
 
   public void RaiseOnPlayClicked()
   {
@@ -80,28 +82,38 @@ public class EventBusDefinition : ScriptableObject
     OnMissileHitShield?.Invoke(missile, grid);
   }
 
-  internal void RaiseOnEnemyHitShield(GameObject enemy, GameObject grid)
+  public void RaiseOnEnemyHitShield(GameObject enemy, GameObject grid)
   {
     OnEnemyHitShield?.Invoke(enemy, grid);
   }
 
-  internal void RaisePlayerDead(int livesRemaining)
+  public void RaisePlayerDead(int livesRemaining)
   {
     OnPlayerDead?.Invoke(livesRemaining);
   }
 
-  internal void RaiseGameOver()
+  public void RaiseGameOver()
   {
     OnGameOver?.Invoke();
   }
 
-  internal void RaiseWaveCleared(int waveNumber)
+  public void RaiseWaveCleared(int waveNumber)
   {
     OnWaveCleared?.Invoke(waveNumber);
   }
 
-  internal void RaiseScoreChanged(int points)
+  public void RaiseScoreChanged(int points)
   {
     OnScoreChanged?.Invoke(points);
+  }
+
+  public void RaiseMissleFired()
+  {
+    OnMissileFired?.Invoke();
+  }
+
+  public void RaiseBombDropped()
+  {
+    OnBombDropped?.Invoke();
   }
 }

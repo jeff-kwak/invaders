@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "com.gr8tgames.audio": "https://github.com/gr8tgames/audio.git#package",
     "com.gr8tgames.statemachine": "https://github.com/gr8tgames/statemachine.git#package",
     "com.unity.2d.animation": "5.0.4",
     "com.unity.2d.psdimporter": "4.0.2",

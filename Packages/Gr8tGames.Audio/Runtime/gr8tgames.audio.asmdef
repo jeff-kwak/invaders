@@ -1,0 +1,16 @@
+{
+    "name": "gr8tgames.audio",
+    "rootNamespace": "Gr8tGames.Audio",
+    "references": [
+        "GUID:4099e5319e98558428028d54bc62664e"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

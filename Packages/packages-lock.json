@@ -1,11 +1,10 @@
 {
   "dependencies": {
     "com.gr8tgames.audio": {
-      "version": "https://github.com/gr8tgames/audio.git#package",
+      "version": "file:Gr8tGames.Audio",
       "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "0f5f3fee2a164a782625a5737c34cebc0c6d04b6"
+      "source": "embedded",
+      "dependencies": {}
     },
     "com.gr8tgames.statemachine": {
       "version": "https://github.com/gr8tgames/statemachine.git#package",
