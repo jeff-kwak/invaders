@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
 [RequireComponent(typeof(SoundController))]
+[RequireComponent(typeof(ExplosionController))]
 public class PrimaryGameController : MonoBehaviour
 {
   public EventBusDefinition EventBus;
@@ -40,6 +41,7 @@ public class PrimaryGameController : MonoBehaviour
   }
 
   private SoundController SoundController;
+  private ExplosionController Explosion;
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float CurrentEnemySpeedBase = 0f;
@@ -54,6 +56,7 @@ public class PrimaryGameController : MonoBehaviour
   private void Awake()
   {
     SoundController = GetComponent<SoundController>();
+    Explosion = GetComponent<ExplosionController>();
 
     LivesRemaining = GamePlay.InitialNumberOfLives;
 
@@ -243,8 +246,10 @@ public class PrimaryGameController : MonoBehaviour
   private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
   {
     SoundController.PlayExplosion();
+    Explosion.Explode(missile.transform.position);
     enemy.SetActive(false);
     missile.SetActive(false);
+    
     var worthPoints = enemy.GetComponent<WorthPoints>();
     Score += worthPoints != null ? worthPoints.PointValue : 0;
     EventBus.RaiseScoreChanged(Score);
@@ -271,6 +276,7 @@ public class PrimaryGameController : MonoBehaviour
   {
     player.SetActive(false);
     bomb.SetActive(false);
+    Explosion.Explode(player.transform.position);
     SoundController.PlayExplosion();
     LivesRemaining--;
     EventBus.RaisePlayerDead(LivesRemaining);
@@ -302,6 +308,7 @@ public class PrimaryGameController : MonoBehaviour
     SoundController.PlayExplosion();
     EraseShieldCell(grid, bomb.transform.position + new Vector3(0, -0.05f, 0));
     bomb.SetActive(false);
+    Explosion.Explode(bomb.transform.position);
   }
 
   private void EventBus_OnMissileHitShield(GameObject missile, GameObject grid)
@@ -309,6 +316,7 @@ public class PrimaryGameController : MonoBehaviour
     SoundController.PlayExplosion();
     EraseShieldCell(grid, missile.transform.position + new Vector3(0, 0.05f, 0));
     missile.SetActive(false);
+    Explosion.Explode(missile.transform.position);
   }
 
   private void EventBus_OnEnemyHitShield(GameObject enemy, GameObject grid)

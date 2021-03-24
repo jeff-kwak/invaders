@@ -4214,6 +4214,7 @@ GameObject:
   - component: {fileID: 1224560946}
   - component: {fileID: 1224560947}
   - component: {fileID: 1224560948}
+  - component: {fileID: 1224560949}
   m_Layer: 0
   m_Name: GameController
   m_TagString: GameController
@@ -4301,6 +4302,20 @@ MonoBehaviour:
   PewPew: {fileID: 11400000, guid: 5cd489222aa5e3f4080f591cd02faa03, type: 2}
   Explosion: {fileID: 11400000, guid: 34fc99d08d99c254b9f16a4026096fa3, type: 2}
   BombDrop: {fileID: 11400000, guid: 9178fbe15487f194eb8b2757a7b370fc, type: 2}
+--- !u!114 &1224560949
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224560944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4d4bf455aa757dc4aabedd93a3c40b55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Event: {fileID: 11400000, guid: eebedf016c94b904484680c4239ad580, type: 2}
+  ExplosionPrefab: {fileID: 7994902902862971948, guid: 6064915f4da8d4a419f72a30961df034, type: 3}
 --- !u!1001 &1257338458
 PrefabInstance:
   m_ObjectHideFlags: 0

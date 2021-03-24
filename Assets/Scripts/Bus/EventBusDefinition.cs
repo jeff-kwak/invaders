@@ -26,6 +26,7 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler OnEnemyHasReachedTheBase;
   public event EventBusHandler OnMissileFired;
   public event EventBusHandler OnBombDropped;
+  public event EventBusHandler<GameObject> OnExplosionComplete;
 
   public void RaiseOnPlayClicked()
   {
@@ -115,5 +116,10 @@ public class EventBusDefinition : ScriptableObject
   public void RaiseBombDropped()
   {
     OnBombDropped?.Invoke();
+  }
+
+  public void RaiseExplosionComplete(GameObject explosion)
+  {
+    OnExplosionComplete?.Invoke(explosion);
   }
 }

@@ -32,12 +32,12 @@ x SOUND: Background music
 x SOUND: SFX
   - Missile firing and explosions
   - SFX Bomb dropping and explosions
-* SOUND: Game over sound/music
-* ART: Particle for enemy explosions
-* ART: Particle for shield explosions
-* ART: Particle for player explosion
-* ART: Particle for missed bomb explosion
-* ART: Redesign main menu
+x ART: Particle effects for explosions
+  - ART: Particle for enemy explosions
+  - ART: Particle for shield explosions
+  - ART: Particle for player explosion
+  - ART: Particle for missed bomb explosion
+* ART: Redesign main menu and game over menu
   - play background music as well
 * INFRA: Build for WebGL and release
 ---
@@ -53,3 +53,4 @@ x SOUND: SFX
 ---
 * CODE: Enemy on the edge has a 50/50 chance to drop bomb on change of direction.
 * CODE: Enter wave restores some shields
+* SOUND: Game over sound/music
