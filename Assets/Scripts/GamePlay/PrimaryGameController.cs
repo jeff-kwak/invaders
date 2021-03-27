@@ -52,6 +52,7 @@ public class PrimaryGameController : MonoBehaviour
   private int EnemiesRemaining = 0;
   private int WaveNumber = 1;
   private int Score = 0;
+  private int BonusLifeScore = 0;
 
   private void Awake()
   {
@@ -174,6 +175,7 @@ public class PrimaryGameController : MonoBehaviour
     SoundController.PlaySlowEnemyMarch();
     CurrentEnemySpeedBase = GamePlay.EnemySpeed * (1f + (WaveNumber - 1) * GamePlay.LevelMultiplierIncrement);
     CurrentEnemySpeed = CurrentEnemySpeedBase;
+    BonusLifeScore += GamePlay.BonusLifePoints;
     EnemyGrid.SetActive(true);
     EnemyGrid.transform.SetPositionAndRotation(Vector3.zero, Quaternion.identity);
     EnemiesRemaining = StartingNumberOfEnemies;
@@ -235,12 +237,12 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnCollisionWithRightWall()
   {
-    Machine.Fire(Trigger.RightWallCollision, () => Debug.Log("collision with right wall"));
+    Machine.Fire(Trigger.RightWallCollision);
   }
 
   private void EventBus_OnCollisionWithLeftWall()
   {
-    Machine.Fire(Trigger.LeftWallCollision, () => Debug.Log("collision with left wall"));
+    Machine.Fire(Trigger.LeftWallCollision);
   }
 
   private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
@@ -253,6 +255,7 @@ public class PrimaryGameController : MonoBehaviour
     var worthPoints = enemy.GetComponent<WorthPoints>();
     Score += worthPoints != null ? worthPoints.PointValue : 0;
     EventBus.RaiseScoreChanged(Score);
+    AwardBonusLife(Score);
     EnemiesRemaining -= 1;
     if(EnemiesRemaining == 0)
     {
@@ -321,6 +324,8 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnEnemyHitShield(GameObject enemy, GameObject grid)
   {
+    SoundController.PlayExplosion();
+    Explosion.Explode(enemy.transform.position);
     EraseShieldCell(grid, enemy.transform.position);
   }
 
@@ -344,5 +349,17 @@ public class PrimaryGameController : MonoBehaviour
   private void EventBus_OnMissileFired()
   {
     SoundController.PlayPewPew();
+  }
+
+  private void AwardBonusLife(int score)
+  {
+    if(score >= BonusLifeScore)
+    {
+      LivesRemaining += 1;
+      Debug.Log($"Bonus life awarded. Lives remaining: {LivesRemaining}");
+      EventBus.RaiseBonusLifeAwarded(LivesRemaining);
+      SoundController.PlayBonusLife();
+      BonusLifeScore += GamePlay.BonusLifePoints;
+    }
   }
 }

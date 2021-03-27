@@ -28,8 +28,12 @@ public class MissleController : MonoBehaviour
     }
     else if(collision.CompareTag("Roof"))
     {
-      Debug.Log($"Missile has missled");
+      Debug.Log($"Missile has missed");
       gameObject.SetActive(false);
+    }
+    else if(collision.CompareTag("Bomb"))
+    {
+      // no-op
     }
     else
     {

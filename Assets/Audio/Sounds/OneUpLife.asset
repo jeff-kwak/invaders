@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b4eecaac7012ef4099f03897bbc320f, type: 3}
+  m_Name: OneUpLife
+  m_EditorClassIdentifier: 
+  Clips:
+  - {fileID: 8300000, guid: 0a892e38dce9242498029c7f39526f50, type: 3}
+  - {fileID: 8300000, guid: d8e852cbc3f536c4a8643fce2bf1ae7b, type: 3}
+  - {fileID: 8300000, guid: 8d341ebccf2c1694099b50fe0887c2bc, type: 3}
+  Output: {fileID: -2253745263192816379, guid: ee4ea52c3f9c033449e3a16fad03c0a5, type: 2}
+  VolumeRange: {x: 1, y: 1}
+  PitchRange: {x: 1, y: 1}
+  SpatialBend: 0.5
+  IsLoop: 0
+  IsOneShot: 1

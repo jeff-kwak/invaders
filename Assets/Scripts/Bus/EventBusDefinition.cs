@@ -27,6 +27,7 @@ public class EventBusDefinition : ScriptableObject
   public event EventBusHandler OnMissileFired;
   public event EventBusHandler OnBombDropped;
   public event EventBusHandler<GameObject> OnExplosionComplete;
+  public event EventBusHandler<int> OnBonusLifeAwarded;
 
   public void RaiseOnPlayClicked()
   {
@@ -121,5 +122,10 @@ public class EventBusDefinition : ScriptableObject
   public void RaiseExplosionComplete(GameObject explosion)
   {
     OnExplosionComplete?.Invoke(explosion);
+  }
+
+  internal void RaiseBonusLifeAwarded(int livesRemaining)
+  {
+    OnBonusLifeAwarded?.Invoke(livesRemaining);
   }
 }

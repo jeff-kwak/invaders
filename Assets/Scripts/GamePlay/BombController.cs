@@ -42,6 +42,6 @@ public class BombController : MonoBehaviour
 
   private bool CollidesWithFilteredObject(string tag)
   {
-    return tag == "Enemy" || tag == "Bomb" || tag == "LeftBorder" || tag == "RightBorder";
+    return tag == "Enemy" || tag == "Bomb" || tag == "Missile" || tag == "LeftBorder" || tag == "RightBorder";
   }
 }

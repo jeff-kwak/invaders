@@ -30,3 +30,4 @@ MonoBehaviour:
   SecondStepSpeedMultiplier: 4
   FirstStepEnemyCount: 25
   SecondStepEnemyCount: 3
+  BonusLifePoints: 20000

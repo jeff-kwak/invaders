@@ -14,6 +14,7 @@ public class SoundController : SoundHandler
   public SoundDefinition PewPew;
   public SoundDefinition Explosion;
   public SoundDefinition BombDrop;
+  public SoundDefinition BonusLife;
 
   private AudioSource enemyMarch;
 
@@ -64,5 +65,10 @@ public class SoundController : SoundHandler
   public void PlayExplosion()
   {
     Play(Explosion);
+  }
+
+  public void PlayBonusLife()
+  {
+    Play(BonusLife);
   }
 }

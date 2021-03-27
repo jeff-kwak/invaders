@@ -21,4 +21,5 @@ public class GamePlayDefinition : ScriptableObject
   public float SecondStepSpeedMultiplier = 4f;
   public int FirstStepEnemyCount = 25;
   public int SecondStepEnemyCount = 3;
+  public int BonusLifePoints = 200;
 }
