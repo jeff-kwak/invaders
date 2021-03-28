@@ -1,0 +1,21 @@
+{
+    "name": "gr8tgames.audio.editor",
+    "rootNamespace": "Gr8tGames.Audio",
+    "references": [
+        "GUID:e6baeeaf7e6bfa944a34ee98295daa67"
+    ],
+    "includePlatforms": [
+        "Editor",
+        "macOSStandalone",
+        "WindowsStandalone32",
+        "WindowsStandalone64"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

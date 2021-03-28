@@ -4,14 +4,15 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(SoundController))]
-[RequireComponent(typeof(ExplosionController))]
 public class PrimaryGameController : MonoBehaviour
 {
   public EventBusDefinition EventBus;
   public CommandBusDefinition CommandBus;
   public GamePlayDefinition GamePlay;
   public GameObject EnemyGrid;
+  public TilemapCollider2D ShieldTilemapCollider;
+  public SoundController NoiseMaker;
+  public ExplosionController Explosion;
 
   private enum State
   {
@@ -40,8 +41,6 @@ public class PrimaryGameController : MonoBehaviour
     WaveCleared
   }
 
-  private SoundController SoundController;
-  private ExplosionController Explosion;
   private StateMachine<State, Trigger> Machine;
   private Vector3 EnemyDirection = Vector3.left;
   private float CurrentEnemySpeedBase = 0f;
@@ -56,9 +55,6 @@ public class PrimaryGameController : MonoBehaviour
 
   private void Awake()
   {
-    SoundController = GetComponent<SoundController>();
-    Explosion = GetComponent<ExplosionController>();
-
     LivesRemaining = GamePlay.InitialNumberOfLives;
 
     Machine = new StateMachine<State, Trigger>(State.Start);
@@ -114,7 +110,6 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnSceneTransitionLeaveCompleted += EventBus_OnSceneTransitionLeaveCompleted;
     EventBus.OnEnemyHasReachedTheBase += EventBus_OnEnemyHasReachedTheBase;
     EventBus.OnMissileFired += EventBus_OnMissileFired;
-
     CommandBus.OnBombDrop += CommandBus_OnBombDrop;
   }
 
@@ -124,6 +119,7 @@ public class PrimaryGameController : MonoBehaviour
     EventBus.OnCollisionWithLeftWall -= EventBus_OnCollisionWithLeftWall;
     EventBus.OnCollisionWithRightWall -= EventBus_OnCollisionWithRightWall;
     EventBus.OnMissileHitEnemy -= EventBus_OnMissileHitEnemy;
+    EventBus.OnMissileHitShield -= EventBus_OnMissileHitShield;
     EventBus.OnBombHitPlayer -= EventBus_OnBombHitPlayer;
     EventBus.OnBombHitShield -= EventBus_OnBombHitShield;
     EventBus.OnEnemyHitShield -= EventBus_OnEnemyHitShield;
@@ -172,7 +168,7 @@ public class PrimaryGameController : MonoBehaviour
   private void DelayedSetup()
   {
     Debug.Log("Delayed setup enter");
-    SoundController.PlaySlowEnemyMarch();
+    NoiseMaker.PlaySlowEnemyMarch();
     CurrentEnemySpeedBase = GamePlay.EnemySpeed * (1f + (WaveNumber - 1) * GamePlay.LevelMultiplierIncrement);
     CurrentEnemySpeed = CurrentEnemySpeedBase;
     BonusLifeScore += GamePlay.BonusLifePoints;
@@ -247,7 +243,7 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnMissileHitEnemy(GameObject missile, GameObject enemy)
   {
-    SoundController.PlayExplosion();
+    NoiseMaker.PlayExplosion();
     Explosion.Explode(missile.transform.position);
     enemy.SetActive(false);
     missile.SetActive(false);
@@ -259,18 +255,18 @@ public class PrimaryGameController : MonoBehaviour
     EnemiesRemaining -= 1;
     if(EnemiesRemaining == 0)
     {
-      SoundController.StopPlayingEnemyMarch();
+      NoiseMaker.StopPlayingEnemyMarch();
       Machine.Fire(Trigger.WaveCleared, () => EventBus.RaiseWaveCleared(WaveNumber));
       WaveNumber++;
     }
     else if(EnemiesRemaining == GamePlay.SecondStepEnemyCount)
     {
-      SoundController.PlayFastEnemyMarch();
+      NoiseMaker.PlayFastEnemyMarch();
       CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.SecondStepSpeedMultiplier;
     }
     else if(EnemiesRemaining == GamePlay.FirstStepEnemyCount)
     {
-      SoundController.PlayMediumEnemyMarch();
+      NoiseMaker.PlayMediumEnemyMarch();
       CurrentEnemySpeed = CurrentEnemySpeedBase * GamePlay.FirstStepSpeedMultiplier;
     }
   }
@@ -280,7 +276,7 @@ public class PrimaryGameController : MonoBehaviour
     player.SetActive(false);
     bomb.SetActive(false);
     Explosion.Explode(player.transform.position);
-    SoundController.PlayExplosion();
+    NoiseMaker.PlayExplosion();
     LivesRemaining--;
     EventBus.RaisePlayerDead(LivesRemaining);
     if (LivesRemaining <= 0)
@@ -308,7 +304,7 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnBombHitShield(GameObject bomb, GameObject grid)
   {
-    SoundController.PlayExplosion();
+    NoiseMaker.PlayExplosion();
     EraseShieldCell(grid, bomb.transform.position + new Vector3(0, -0.05f, 0));
     bomb.SetActive(false);
     Explosion.Explode(bomb.transform.position);
@@ -316,15 +312,16 @@ public class PrimaryGameController : MonoBehaviour
 
   private void EventBus_OnMissileHitShield(GameObject missile, GameObject grid)
   {
-    SoundController.PlayExplosion();
+    Debug.Log($"GameController: missle hit shield. SoundController: {NoiseMaker}, ExplosionController: {Explosion}");
     EraseShieldCell(grid, missile.transform.position + new Vector3(0, 0.05f, 0));
     missile.SetActive(false);
     Explosion.Explode(missile.transform.position);
+    NoiseMaker.PlayExplosion();
   }
 
   private void EventBus_OnEnemyHitShield(GameObject enemy, GameObject grid)
   {
-    SoundController.PlayExplosion();
+    NoiseMaker.PlayExplosion();
     Explosion.Explode(enemy.transform.position);
     EraseShieldCell(grid, enemy.transform.position);
   }
@@ -343,12 +340,12 @@ public class PrimaryGameController : MonoBehaviour
 
   private void CommandBus_OnBombDrop(Vector3 pos)
   {
-    SoundController.PlayBombDrop();
+    NoiseMaker.PlayBombDrop();
   }
 
   private void EventBus_OnMissileFired()
   {
-    SoundController.PlayPewPew();
+    NoiseMaker.PlayPewPew();
   }
 
   private void AwardBonusLife(int score)
@@ -358,7 +355,7 @@ public class PrimaryGameController : MonoBehaviour
       LivesRemaining += 1;
       Debug.Log($"Bonus life awarded. Lives remaining: {LivesRemaining}");
       EventBus.RaiseBonusLifeAwarded(LivesRemaining);
-      SoundController.PlayBonusLife();
+      NoiseMaker.PlayBonusLife();
       BonusLifeScore += GamePlay.BonusLifePoints;
     }
   }

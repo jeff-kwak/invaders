@@ -19,6 +19,7 @@ public class GameOverMenuController : MonoBehaviour
   {
     EventBus.OnPlayClicked -= EventBus_OnPlayClicked;
     EventBus.OnQuitClicked -= EventBus_OnQuitClicked;
+    EventBus.OnSceneTransitionLeaveCompleted -= EventBus_OnSceneTransitionLeaveCompleted;
   }
 
   private void Start()
@@ -29,9 +30,12 @@ public class GameOverMenuController : MonoBehaviour
   private void EventBus_OnQuitClicked()
   {
     Debug.Log("Goodbye!");
-    Application.Quit();
 #if UNITY_EDITOR
     UnityEditor.EditorApplication.isPlaying = false;
+#elif (UNITY_STANDALONE)
+    Application.Quit();
+#elif UNITY_WEBGL
+    Application.OpenURL("about:blank");
 #endif
   }
 

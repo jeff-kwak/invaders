@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace Gr8tGames.Audio
 {
 
@@ -38,3 +39,4 @@ namespace Gr8tGames.Audio
     }
   }
 }
+#endif

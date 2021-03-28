@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class BombController : MonoBehaviour
@@ -42,6 +39,8 @@ public class BombController : MonoBehaviour
 
   private bool CollidesWithFilteredObject(string tag)
   {
-    return tag == "Enemy" || tag == "Bomb" || tag == "Missile" || tag == "LeftBorder" || tag == "RightBorder";
+    var result = tag == "Enemy" || tag == "Bomb" || tag == "Missile" || tag == "LeftBorder" || tag == "RightBorder";
+    if(result) Debug.Log($"Bomb {gameObject.name} has collided with {tag} but it is ignored");
+    return result;
   }
 }

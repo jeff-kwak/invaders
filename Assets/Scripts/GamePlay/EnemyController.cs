@@ -69,7 +69,7 @@ public class EnemyController : MonoBehaviour
     {
       Debug.Log($"{gameObject.name} hit by missile");
     }
-    else if(collision.CompareTag("Bomb") || collision.CompareTag("Shield"))
+    else if(collision.CompareTag("Bomb"))
     {
       // no-operation
     }
@@ -79,14 +79,15 @@ public class EnemyController : MonoBehaviour
     }
     else
     {
-      Debug.LogError($"{gameObject.name} entered trigger {collision.gameObject.name}: {collision.tag} but there was no handler");
+      Debug.LogError($"EnemyController: {gameObject.name} entered trigger {collision.gameObject.name}: {collision.tag} but there was no handler");
     }
   }
 
   private void OnTriggerStay2D(Collider2D collision)
   {
-    if(collision.CompareTag("Shield"))
+    if (collision.CompareTag("Shield"))
     {
+      Debug.Log("EnemyController: Enemy collision with shield");
       Event.RaiseOnEnemyHitShield(gameObject, collision.gameObject);
     }
   }

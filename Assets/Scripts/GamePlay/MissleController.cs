@@ -33,7 +33,7 @@ public class MissleController : MonoBehaviour
     }
     else if(collision.CompareTag("Bomb"))
     {
-      // no-op
+      Debug.Log($"Missile {gameObject.name} has collided with {collision.gameObject.name}:{collision.tag} and it is intentionally ignored."); 
     }
     else
     {

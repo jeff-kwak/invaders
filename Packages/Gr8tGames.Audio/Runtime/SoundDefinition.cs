@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.Audio;
-using GD.MinMaxSlider;
 
 namespace Gr8tGames.Audio
 {

@@ -1,4 +1,4 @@
-﻿namespace GD.MinMaxSlider
+﻿namespace Gr8tGames.Audio
 {
     using UnityEngine;
 
